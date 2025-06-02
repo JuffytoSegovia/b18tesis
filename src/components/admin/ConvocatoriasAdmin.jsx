@@ -1,10 +1,12 @@
 // src/components/admin/ConvocatoriasAdmin.jsx
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Download, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, Download, Upload, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useConvocatorias } from '../../hooks/useFirestore';
 import ConvocatoriaModal from './ConvocatoriaModal';
 
 const ConvocatoriasAdmin = () => {
+  const navigate = useNavigate();
   const { 
     convocatorias, 
     loading, 
@@ -26,6 +28,10 @@ const ConvocatoriasAdmin = () => {
   const handleEditarConvocatoria = (convocatoria) => {
     setEditingConvocatoria(convocatoria);
     setShowModal(true);
+  };
+
+  const handleGestionarEtapas = (convocatoriaId) => {
+    navigate(`/admin/convocatorias/${convocatoriaId}/etapas`);
   };
 
   const handleEliminarConvocatoria = async (id) => {
@@ -191,6 +197,14 @@ const ConvocatoriasAdmin = () => {
                   <td>{formatFecha(convocatoria.fechaActualizacion)}</td>
                   <td>
                     <div className="table-actions">
+                      <button
+                        className="btn-icon"
+                        onClick={() => handleGestionarEtapas(convocatoria.id)}
+                        title="Gestionar Etapas"
+                        disabled={deletingId === convocatoria.id}
+                      >
+                        <Settings size={16} />
+                      </button>
                       <button
                         className="btn-icon"
                         onClick={() => handleEditarConvocatoria(convocatoria)}
