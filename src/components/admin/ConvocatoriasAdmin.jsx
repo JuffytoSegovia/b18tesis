@@ -1,36 +1,22 @@
 // src/components/admin/ConvocatoriasAdmin.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Download, Upload } from 'lucide-react';
+import { useConvocatorias } from '../../hooks/useFirestore';
+import ConvocatoriaModal from './ConvocatoriaModal';
 
 const ConvocatoriasAdmin = () => {
-  const [convocatorias, setConvocatorias] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { 
+    convocatorias, 
+    loading, 
+    error, 
+    createConvocatoria, 
+    updateConvocatoria, 
+    deleteConvocatoria 
+  } = useConvocatorias();
+
   const [showModal, setShowModal] = useState(false);
   const [editingConvocatoria, setEditingConvocatoria] = useState(null);
-
-  // Mock data inicial
-  useEffect(() => {
-    setConvocatorias([
-      {
-        id: '2025',
-        nombre: 'Beca 18 - 2025',
-        ano: 2025,
-        descripcion: 'Convocatoria de Beca 18 para el año académico 2025',
-        activa: true,
-        fechaCreacion: new Date('2024-12-01'),
-        fechaActualizacion: new Date('2025-01-15')
-      },
-      {
-        id: '2024',
-        nombre: 'Beca 18 - 2024',
-        ano: 2024,
-        descripcion: 'Convocatoria de Beca 18 para el año académico 2024',
-        activa: false,
-        fechaCreacion: new Date('2023-12-01'),
-        fechaActualizacion: new Date('2024-12-31')
-      }
-    ]);
-  }, []);
+  const [deletingId, setDeletingId] = useState(null);
 
   const handleNuevaConvocatoria = () => {
     setEditingConvocatoria(null);
@@ -42,18 +28,70 @@ const ConvocatoriasAdmin = () => {
     setShowModal(true);
   };
 
-  const handleEliminarConvocatoria = (id) => {
-    if (window.confirm('¿Está seguro de eliminar esta convocatoria?')) {
-      setConvocatorias(prev => prev.filter(c => c.id !== id));
+  const handleEliminarConvocatoria = async (id) => {
+    if (window.confirm('¿Está seguro de eliminar esta convocatoria? Esta acción no se puede deshacer.')) {
+      try {
+        setDeletingId(id);
+        await deleteConvocatoria(id);
+        alert('Convocatoria eliminada exitosamente');
+      } catch (error) {
+        alert('Error al eliminar la convocatoria: ' + error.message);
+      } finally {
+        setDeletingId(null);
+      }
+    }
+  };
+
+  const handleSaveConvocatoria = async (convocatoriaData) => {
+    try {
+      if (editingConvocatoria) {
+        await updateConvocatoria(editingConvocatoria.id, convocatoriaData);
+        alert('Convocatoria actualizada exitosamente');
+      } else {
+        await createConvocatoria(convocatoriaData);
+        alert('Convocatoria creada exitosamente');
+      }
+      setShowModal(false);
+    } catch (error) {
+      alert('Error al guardar la convocatoria: ' + error.message);
     }
   };
 
   const handleExportarCSV = () => {
-    alert('Función de exportar CSV será implementada en la siguiente fase');
+    if (convocatorias.length === 0) {
+      alert('No hay convocatorias para exportar');
+      return;
+    }
+
+    // Crear CSV básico
+    const headers = ['ID', 'Nombre', 'Año', 'Descripción', 'Estado', 'Fecha Creación', 'Última Actualización'];
+    const csvData = [
+      headers.join(','),
+      ...convocatorias.map(conv => [
+        conv.id,
+        `"${conv.nombre}"`,
+        conv.ano,
+        `"${conv.descripcion || ''}"`,
+        conv.activa ? 'ACTIVA' : 'INACTIVA',
+        conv.fechaCreacion.toLocaleDateString('es-PE'),
+        conv.fechaActualizacion.toLocaleDateString('es-PE')
+      ].join(','))
+    ].join('\n');
+
+    // Descargar archivo
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `convocatorias_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleImportarCSV = () => {
-    alert('Función de importar CSV será implementada en la siguiente fase');
+    alert('Función de importar CSV será implementada en la siguiente iteración');
   };
 
   const formatFecha = (fecha) => {
@@ -64,6 +102,29 @@ const ConvocatoriasAdmin = () => {
     });
   };
 
+  if (loading) {
+    return (
+      <div className="convocatorias-admin">
+        <div className="loading">
+          <p>Cargando convocatorias...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="convocatorias-admin">
+        <div className="error">
+          <p>Error al cargar convocatorias: {error}</p>
+          <button className="btn btn-primary" onClick={() => window.location.reload()}>
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="convocatorias-admin">
       <div className="admin-section-header">
@@ -73,7 +134,11 @@ const ConvocatoriasAdmin = () => {
             <Upload size={16} />
             Importar CSV
           </button>
-          <button className="btn btn-secondary" onClick={handleExportarCSV}>
+          <button 
+            className="btn btn-secondary" 
+            onClick={handleExportarCSV}
+            disabled={convocatorias.length === 0}
+          >
             <Download size={16} />
             Exportar CSV
           </button>
@@ -84,70 +149,80 @@ const ConvocatoriasAdmin = () => {
         </div>
       </div>
 
-      <div className="table-container">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Año</th>
-              <th>Estado</th>
-              <th>Fecha Creación</th>
-              <th>Última Actualización</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {convocatorias.map((convocatoria) => (
-              <tr key={convocatoria.id}>
-                <td>
-                  <div>
-                    <div className="convocatoria-nombre">{convocatoria.nombre}</div>
-                    <div className="convocatoria-descripcion">{convocatoria.descripcion}</div>
-                  </div>
-                </td>
-                <td>{convocatoria.ano}</td>
-                <td>
-                  <span className={`status-badge ${convocatoria.activa ? 'active' : 'inactive'}`}>
-                    {convocatoria.activa ? 'Activa' : 'Inactiva'}
-                  </span>
-                </td>
-                <td>{formatFecha(convocatoria.fechaCreacion)}</td>
-                <td>{formatFecha(convocatoria.fechaActualizacion)}</td>
-                <td>
-                  <div className="table-actions">
-                    <button
-                      className="btn-icon"
-                      onClick={() => handleEditarConvocatoria(convocatoria)}
-                      title="Editar"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className="btn-icon btn-danger"
-                      onClick={() => handleEliminarConvocatoria(convocatoria.id)}
-                      title="Eliminar"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Modal de formulario será implementado en la siguiente iteración */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>{editingConvocatoria ? 'Editar Convocatoria' : 'Nueva Convocatoria'}</h3>
-            <p>Formulario de convocatoria será implementado en la siguiente fase.</p>
-            <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
-              Cerrar
-            </button>
-          </div>
+      {convocatorias.length === 0 ? (
+        <div className="empty-state">
+          <p>No hay convocatorias creadas</p>
+          <button className="btn btn-primary" onClick={handleNuevaConvocatoria}>
+            <Plus size={16} />
+            Crear primera convocatoria
+          </button>
         </div>
+      ) : (
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Año</th>
+                <th>Estado</th>
+                <th>Fecha Creación</th>
+                <th>Última Actualización</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {convocatorias.map((convocatoria) => (
+                <tr key={convocatoria.id}>
+                  <td>
+                    <div>
+                      <div className="convocatoria-nombre">{convocatoria.nombre}</div>
+                      {convocatoria.descripcion && (
+                        <div className="convocatoria-descripcion">{convocatoria.descripcion}</div>
+                      )}
+                    </div>
+                  </td>
+                  <td>{convocatoria.ano}</td>
+                  <td>
+                    <span className={`status-badge ${convocatoria.activa ? 'active' : 'inactive'}`}>
+                      {convocatoria.activa ? 'Activa' : 'Inactiva'}
+                    </span>
+                  </td>
+                  <td>{formatFecha(convocatoria.fechaCreacion)}</td>
+                  <td>{formatFecha(convocatoria.fechaActualizacion)}</td>
+                  <td>
+                    <div className="table-actions">
+                      <button
+                        className="btn-icon"
+                        onClick={() => handleEditarConvocatoria(convocatoria)}
+                        title="Editar"
+                        disabled={deletingId === convocatoria.id}
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        className="btn-icon btn-danger"
+                        onClick={() => handleEliminarConvocatoria(convocatoria.id)}
+                        title="Eliminar"
+                        disabled={deletingId === convocatoria.id}
+                      >
+                        {deletingId === convocatoria.id ? '...' : <Trash2 size={16} />}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Modal de formulario */}
+      {showModal && (
+        <ConvocatoriaModal
+          convocatoria={editingConvocatoria}
+          onSave={handleSaveConvocatoria}
+          onClose={() => setShowModal(false)}
+        />
       )}
     </div>
   );
