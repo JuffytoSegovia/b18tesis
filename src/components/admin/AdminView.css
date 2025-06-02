@@ -402,6 +402,112 @@
   line-height: 1.6;
 }
 
+/* Estilos adicionales para requisitos */
+.requisitos-admin {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.form-section h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+.especificacion-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: flex-start;
+}
+
+.especificacion-row .form-input {
+  flex: 1;
+}
+
+.codigo-requisito {
+  font-family: monospace;
+  font-weight: 600;
+  color: #2c5aa0;
+  background: #dbeafe;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.requisito-titulo {
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.requisito-descripcion-preview {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.categoria-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.categoria-badge.bg-blue-100 {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.categoria-badge.bg-red-100 {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.categoria-badge.bg-yellow-100 {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.categoria-badge.bg-gray-100 {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.tipo-documento {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.modelos-icons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modelo-icon {
+  color: #2c5aa0;
+}
+
+.imagen-icon {
+  color: #059669;
+}
+
 @media (max-width: 768px) {
   .admin-section-header {
     flex-direction: column;
@@ -456,5 +562,19 @@
   
   .empty-actions {
     flex-direction: column;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .especificacion-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .categoria-badge {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.5rem;
   }
 }

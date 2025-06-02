@@ -7,6 +7,7 @@ import UserView from './components/user/UserView';
 import AdminView from './components/admin/AdminView';
 import EtapasAdmin from './components/admin/EtapasAdmin';
 import SeccionesAdmin from './components/admin/SeccionesAdmin';
+import RequisitosAdmin from './components/admin/RequisitosAdmin';
 import './App.css';
 
 function App() {
@@ -27,7 +28,9 @@ function App() {
               <Route path="/admin/convocatorias" element={<AdminView />} />
               <Route path="/admin/convocatorias/:convocatoriaId/etapas" element={<EtapasAdmin />} />
               <Route path="/admin/convocatorias/:convocatoriaId/etapas/:etapaId/secciones" element={<SeccionesAdmin />} />
-              <Route path="/admin/convocatorias/:convocatoriaId/etapas/:etapaId/secciones/:seccionId" element={<AdminView />} />
+              
+              {/* Ruta única para todos los tipos de contenido */}
+              <Route path="/admin/convocatorias/:convocatoriaId/etapas/:etapaId/secciones/:seccionId/contenido" element={<RequisitosAdmin />} />
               
               {/* Fallback */}
               <Route path="*" element={<UserView />} />

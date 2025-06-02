@@ -1,6 +1,6 @@
 // src/components/admin/SeccionesAdmin.jsx
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, ArrowLeft, ArrowUp, ArrowDown, Zap } from 'lucide-react';
+import { Plus, Edit, Trash2, ArrowLeft, ArrowUp, ArrowDown, Zap, Settings } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSecciones, useEtapas, useConvocatorias } from '../../hooks/useFirestore';
 import SeccionModal from './SeccionModal';
@@ -283,6 +283,14 @@ const SeccionesAdmin = () => {
                   <td>{formatFecha(seccion.fechaCreacion)}</td>
                   <td>
                     <div className="table-actions">
+                      <button
+                        className="btn-icon"
+                        onClick={() => navigate(`/admin/convocatorias/${convocatoriaId}/etapas/${etapaId}/secciones/${seccion.id}/contenido`)}
+                        title="Gestionar Contenido"
+                        disabled={deletingId === seccion.id}
+                      >
+                        <Settings size={16} />
+                      </button>
                       <button
                         className="btn-icon"
                         onClick={() => handleEditarSeccion(seccion)}

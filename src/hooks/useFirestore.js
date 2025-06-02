@@ -260,3 +260,6 @@ export const useSecciones = (convocatoriaId, etapaId) => {
     reloadSecciones: loadSecciones
   };
 };
+
+// Exportar hook de contenido requisitos
+export { useContenidoRequisitos } from './useContenidoRequisitos';
