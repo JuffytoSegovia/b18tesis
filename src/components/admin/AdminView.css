@@ -57,6 +57,11 @@
   font-size: 0.875rem;
 }
 
+.breadcrumb-separator {
+  color: #9ca3af;
+  font-weight: normal;
+}
+
 .admin-actions {
   display: flex;
   gap: 0.75rem;
@@ -70,7 +75,8 @@
 }
 
 .convocatoria-nombre,
-.etapa-nombre {
+.etapa-nombre,
+.seccion-nombre {
   font-weight: 500;
   color: #1f2937;
   margin-bottom: 0.25rem;
@@ -80,6 +86,20 @@
 .etapa-descripcion {
   font-size: 0.875rem;
   color: #6b7280;
+}
+
+.seccion-icono-display {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.tipo-contenido {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
 }
 
 .status-badge {
@@ -169,6 +189,74 @@
   margin-bottom: 0.5rem;
 }
 
+.predefined-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.predefined-section-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.predefined-section-btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.section-icon {
+  font-size: 1.125rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.section-name {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.iconos-comunes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.icono-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  background: white;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.icono-btn:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.icono-btn.selected {
+  border-color: #2c5aa0;
+  background: #dbeafe;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -190,6 +278,10 @@
   max-height: 90vh;
   overflow: hidden;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal-large {
+  max-width: 700px;
 }
 
 .modal-header {
@@ -278,6 +370,13 @@
   font-size: 1.125rem;
 }
 
+.empty-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .loading {
   text-align: center;
   padding: 3rem;
@@ -339,8 +438,10 @@
     padding: 1rem;
   }
   
-  .predefined-buttons {
+  .predefined-buttons,
+  .predefined-sections {
     flex-direction: column;
+    grid-template-columns: 1fr;
   }
   
   .orden-controls {
@@ -351,5 +452,9 @@
   
   .orden-buttons {
     flex-direction: row;
+  }
+  
+  .empty-actions {
+    flex-direction: column;
   }
 }

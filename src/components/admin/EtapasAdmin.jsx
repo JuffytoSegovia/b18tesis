@@ -1,8 +1,9 @@
 // src/components/admin/EtapasAdmin.jsx
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, ArrowLeft, ArrowUp, ArrowDown } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEtapas, useConvocatorias } from '../../hooks/useFirestore';
+import { Plus, Edit, Trash2, Settings, ArrowLeft, ArrowUp, ArrowDown } from 'lucide-react';
+import { useConvocatorias } from '../../hooks/useFirestore';
+import { useEtapas } from '../../hooks/useFirestore';
 import EtapaModal from './EtapaModal';
 
 const EtapasAdmin = () => {
@@ -34,6 +35,10 @@ const EtapasAdmin = () => {
   const handleEditarEtapa = (etapa) => {
     setEditingEtapa(etapa);
     setShowModal(true);
+  };
+
+  const handleGestionarSecciones = (etapaId) => {
+    navigate(`/admin/convocatorias/${convocatoriaId}/etapas/${etapaId}/secciones`);
   };
 
   const handleEliminarEtapa = async (etapaId) => {
@@ -227,6 +232,14 @@ const EtapasAdmin = () => {
                   <td>{formatFecha(etapa.fechaCreacion)}</td>
                   <td>
                     <div className="table-actions">
+                      <button
+                        className="btn-icon"
+                        onClick={() => handleGestionarSecciones(etapa.id)}
+                        title="Gestionar Secciones"
+                        disabled={deletingId === etapa.id}
+                      >
+                        <Settings size={16} />
+                      </button>
                       <button
                         className="btn-icon"
                         onClick={() => handleEditarEtapa(etapa)}
