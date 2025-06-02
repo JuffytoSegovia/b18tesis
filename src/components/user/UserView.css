@@ -1,0 +1,173 @@
+/* src/components/user/UserView.css */
+.user-view {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.welcome-section {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.welcome-section h2 {
+  font-size: 2rem;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.welcome-section p {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.info-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.info-card h3 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.info-card p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.seccion-content {
+  max-width: 900px;
+}
+
+.seccion-content h2 {
+  font-size: 1.875rem;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.ultima-actualizacion {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.documentos-section h3 {
+  font-size: 1.5rem;
+  color: #2c5aa0;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.requisitos-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.requisito-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #2c5aa0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.requisito-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transform: translateX(4px);
+}
+
+.requisito-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.requisito-icono {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.requisito-titulo {
+  font-size: 1.125rem;
+  color: #1f2937;
+  margin: 0;
+  font-weight: 600;
+}
+
+.requisito-descripcion {
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.content-placeholder {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 3rem;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .welcome-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .welcome-section p {
+    font-size: 1rem;
+  }
+  
+  .info-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .info-card {
+    padding: 1.5rem;
+  }
+  
+  .requisito-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
